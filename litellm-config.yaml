@@ -1,0 +1,11 @@
+model_list:
+  - model_name: gpt-4
+    litellm_params:
+      model: openai/gpt-4
+      api_key: fake-key
+      mock_response: "This is a mock response from LiteLLM."
+  - model_name: gpt-3.5-turbo
+    litellm_params:
+      model: openai/gpt-3.5-turbo
+      api_key: fake-key
+      mock_response: "This is a mock response from LiteLLM."
