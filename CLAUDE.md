@@ -90,7 +90,7 @@ return new Response(JSON.stringify({ error: "Unauthorized" }), {
 // vitest.config.ts
 import { defineWorkersConfig } from "@cloudflare/vitest-pool-workers/config";
 export default defineWorkersConfig({
-  test: { poolOptions: { workers: { wrangler: { configPath: "./wrangler.toml" } } } },
+  test: { poolOptions: { workers: { wrangler: { configPath: "./wrangler.jsonc" } } } },
 });
 ```
 
@@ -107,13 +107,28 @@ expect(res.status).toBe(200);
 ```
 
 テストすべきケース:
+
+認証:
 - Authorization ヘッダーなし → 401
 - 無効トークン → 401
+- Bearer プレフィックスなし → 401
+- 空トークン (`Bearer ` の後が空文字) → 401
 - 有効トークン → LiteLLM 転送 (fetch mock で検証)
+
+ルーティング:
 - POST 以外 → 405
 - 不正パス → 404
+
+プロキシ動作:
+- リクエストボディが LiteLLM へ正確に転送される
+- Content-Type なしリクエストは `application/json` をデフォルトとして LiteLLM へ転送
 - LiteLLM ダウン → 502
 - LiteLLM 500 → そのまま伝播
+
+セキュリティ:
+- 401 レスポンスに `error` キー以外を含めない
+- 全エラーレスポンス (401/404/405/502) の Content-Type が `application/json`
+- `Authorization` ヘッダー (CLIENT_API_KEY) を LiteLLM へ転送しない
 
 ## Security
 
