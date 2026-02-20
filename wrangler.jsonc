@@ -3,5 +3,11 @@
 	"name": "edge-llm-gateway",
 	"main": "src/index.ts",
 	"compatibility_date": "2026-02-19",
-	"compatibility_flags": ["nodejs_compat"]
+	"compatibility_flags": ["nodejs_compat"],
+	"routes": [
+		{
+			"pattern": "llm.idxx.dev",
+			"custom_domain": true
+		}
+	]
 }
